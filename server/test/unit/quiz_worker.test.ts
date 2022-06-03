@@ -3,7 +3,7 @@ import {
   QuizCategory,
   QuizLevel,
 } from "../../src/interfaces/interfaces";
-import { QuizWorker } from "../../src/quiz_worker";
+import { QuizWorker } from "../../src/controllers/quiz_worker";
 import { v4 as uuid4 } from "uuid";
 
 const dbEmpty = async () => {

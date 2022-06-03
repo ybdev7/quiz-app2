@@ -11,6 +11,9 @@
 /node_modules
 /.pnp
 .pnp.js
+*quiz.db*
+*user.db*
+data_init*
 
 # testing
 /coverage

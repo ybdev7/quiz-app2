@@ -5,10 +5,9 @@ import {
   QuizNotFound,
   QuizNotUpdated,
   QuizzesNotFound,
-} from "./errors";
-import { IQuiz } from "./interfaces/interfaces";
-import { QuizWorker } from "./quiz_worker";
-import { quizWorker } from "./quizDAL";
+} from "../errors";
+import { IQuiz } from "../interfaces/interfaces";
+import { quizWorker } from "../controllers/quizDAL";
 
 //create router
 const quizRouter = express.Router();

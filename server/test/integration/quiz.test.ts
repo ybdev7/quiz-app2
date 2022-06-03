@@ -7,7 +7,7 @@ import {
   QuizLevel,
 } from "../../src/interfaces/interfaces";
 import { v4 as uuid4 } from "uuid";
-import { QuizWorker } from "../../src/quiz_worker";
+import { QuizWorker } from "../../src/controllers/quiz_worker";
 
 let agent: SuperAgentTest;
 let server: Server;

@@ -26,6 +26,19 @@ export interface IQuestion extends IEntity {
   answers: IAnswer[];
 }
 
+// User
+export enum UserRole {
+  Admin,
+  Editor,
+  Viewer,
+}
+export interface IUser extends IEntity {
+  username: string;
+  password: string;
+  role: UserRole;
+}
+// User end
+
 export interface IQuiz extends IEntity {
   title: string;
   category: QuizCategory;

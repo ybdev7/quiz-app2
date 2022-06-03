@@ -1,6 +1,6 @@
 import Nedb from "nedb";
 import * as path from "path";
-import { IQuiz } from "./interfaces/interfaces";
+import { IQuiz } from "../interfaces/interfaces";
 
 export class QuizWorker {
   private _db: Nedb;

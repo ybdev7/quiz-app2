@@ -34,3 +34,21 @@ export class QuizNotDeleted extends BaseError {
     super(500, `Could not delete quiz with id ${id}.`, "");
   }
 }
+
+export class UserNotFound extends BaseError {
+  constructor(id: string) {
+    super(500, `Could not retrieve user with id ${id}.`, "Quiz not found.");
+  }
+}
+
+export class UserNotUpdated extends BaseError {
+  constructor(id: string) {
+    super(500, `Could not update user with id ${id}.`, "");
+  }
+}
+
+export class UserNotDeleted extends BaseError {
+  constructor(id: string) {
+    super(500, `Could not delete user with id ${id}.`, "");
+  }
+}

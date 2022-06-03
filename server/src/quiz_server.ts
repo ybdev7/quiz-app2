@@ -5,11 +5,13 @@ export class quizServer {
   private app: Express;
   private port: number;
   private quizUrl: string;
+  private userUrl: string;
 
   constructor(port?: number) {
     this.app = express();
     this.port = port ? port : 80;
     this.quizUrl = "/quiz";
+    this.userUrl = "/user";
 
     this.init();
     this.initRoute();
@@ -26,7 +28,6 @@ export class quizServer {
 
   private init() {
     this.app.use(express.json());
-    //this.app.use("/", express.static(path.join(__dirname, "./dist/public")));
     this.app.use(express.static(path.join(__dirname, "../../../client/build")));
 
     //enable CORS
@@ -41,7 +42,8 @@ export class quizServer {
     });
   }
   private initRoute() {
-    this.app.use(this.quizUrl, require("./quiz_router"));
+    this.app.use(this.quizUrl, require("./routers/quiz_router"));
+    this.app.use(this.userUrl, require("./routers/user_router"));
   }
 
   public listen() {
