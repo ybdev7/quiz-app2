@@ -2,6 +2,7 @@ import React from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import "./App.css";
 import Home from "./pages/Home";
+import Signup from "./pages/Signup";
 
 function App() {
   const queryClient = new QueryClient();
@@ -9,7 +10,8 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <>
-        <Home />
+        {/* <Home /> */}
+        <Signup />
       </>
     </QueryClientProvider>
   );

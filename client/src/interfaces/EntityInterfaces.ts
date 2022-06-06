@@ -16,6 +16,19 @@ export interface IEntity {
   _id?: string;
 }
 
+// User
+export enum UserRole {
+  Admin,
+  Editor,
+  Viewer,
+}
+export interface IUser extends IEntity {
+  username: string;
+  password: string;
+  role: UserRole;
+}
+// User end
+
 export interface IAnswer extends IEntity {
   answerText: string;
   isCorrect: boolean;
