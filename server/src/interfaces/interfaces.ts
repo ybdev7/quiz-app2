@@ -37,6 +37,16 @@ export interface IUser extends IEntity {
   password: string;
   role: UserRole;
 }
+
+export interface IUserCredentials {
+  username: string;
+  password: string;
+}
+export interface IUserWithToken extends IEntity {
+  username: string;
+  role: UserRole;
+  token: string;
+}
 // User end
 
 export interface IQuiz extends IEntity {

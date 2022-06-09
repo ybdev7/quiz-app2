@@ -1,6 +1,13 @@
 import Nedb from "nedb";
 import * as path from "path";
-import { IUser } from "../interfaces/interfaces";
+import {
+  IUser,
+  IUserCredentials,
+  IUserWithToken,
+} from "../interfaces/interfaces";
+import { hashSync, compareSync } from "bcryptjs";
+import { sign } from "jsonwebtoken";
+import { secret } from "../config/authorization";
 
 export class UserWorker {
   private _db: Nedb;
@@ -16,15 +23,17 @@ export class UserWorker {
   }
 
   public addUser(user: IUser): Promise<IUser> {
-    console.log("IN UserWorker.addUser()", user);
+    console.log("IN UserWorker.addUser()", user.username);
+
+    const encUser: IUser = { ...user, password: hashSync(user.password, 8) };
 
     return new Promise<IUser>((resolveHandler, rejectHandler) => {
-      this._db.insert<IUser>(user, (err: Error | null, newUser: IUser) => {
+      this._db.insert<IUser>(encUser, (err: Error | null, newUser: IUser) => {
         if (err) {
           console.log("ERROR in UserWorker.addUser(): ", err);
           rejectHandler(err);
         } else {
-          console.log("SUCCESS in UserWorker.addUser(): ", newUser);
+          console.log("SUCCESS in UserWorker.addUser(): ", newUser.username);
           resolveHandler(newUser);
         }
       });
@@ -44,6 +53,38 @@ export class UserWorker {
             `SUCCESS in UserWorker.listUserzes(). Retrieved ${users.length} users.`
           );
           resolveHandler(users);
+        }
+      });
+    });
+  }
+
+  public signin(user: IUserCredentials): Promise<IUserWithToken> {
+    return new Promise((resolveHandler, rejectHandler) => {
+      this.getUserByUsername(user.username).then((u) => {
+        if (!u) {
+          console.log(
+            `ERROR in UserWorker.signin for user=(${user.username}): Error - user not found`
+          );
+          rejectHandler(new Error("user not found"));
+        } else {
+          const isPwdCorrect = compareSync(user.password, u.password);
+          if (!isPwdCorrect) {
+            console.log(
+              `ERROR in UserWorker.signin for user=(${user.username}): Error password doesn't match`
+            );
+            rejectHandler(new Error("username and password do not match"));
+          } else {
+            var token = sign({ id: u._id }, secret, {
+              expiresIn: 86400,
+            });
+            const userWithToken: IUserWithToken = {
+              _id: u._id,
+              username: u.username,
+              role: u.role,
+              token: token,
+            };
+            resolveHandler(userWithToken);
+          }
         }
       });
     });
@@ -121,12 +162,14 @@ export class UserWorker {
   }
 
   public updateUser(user: IUser): Promise<IUser> {
-    console.log("UserWorker.updateUser()", user);
+    console.log("UserWorker.updateUser()", user.username);
+
+    const u: IUser = { ...user, password: hashSync(user.password, 8) };
 
     return new Promise<IUser>((resolveHandler, rejectHandler) => {
       this._db.update<IUser>(
         { _id: user._id },
-        user,
+        u,
         { returnUpdatedDocs: true },
         (
           err: Error | null,

@@ -1,6 +1,10 @@
 import axios, { AxiosResponse } from "axios";
 import { useQuery } from "react-query";
-import { IUser } from "../interfaces/EntityInterfaces";
+import {
+  IUser,
+  IUserCredentials,
+  IUserWithToken,
+} from "../interfaces/EntityInterfaces";
 import { config } from "./config";
 
 //The worker that will perform user operations
@@ -15,6 +19,16 @@ export class UserWorker {
 
     const response: AxiosResponse = await axios.post(
       `${config.serverAddress}/user`,
+      user
+    );
+    return response.data;
+  }
+
+  public async signin(user: IUserCredentials): Promise<IUserWithToken> {
+    console.log(`UsersWorker.signin(${user.username})`);
+
+    const response: AxiosResponse = await axios.post(
+      `${config.serverAddress}/user/signin`,
       user
     );
     return response.data;

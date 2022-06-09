@@ -5,7 +5,7 @@ import {
   UserNotFound,
   UserNotUpdated,
 } from "../errors";
-import { IUser } from "../interfaces/interfaces";
+import { IUser, IUserWithToken } from "../interfaces/interfaces";
 import { userWorker } from "../controllers/userDAL";
 import {
   checkDuplicateUsername,
@@ -93,6 +93,19 @@ userRouter.post(
       next();
     } catch (err) {
       next(new BaseError(500, "Failed to add user", (err as any).stack)); //tbd
+    }
+  }
+);
+
+userRouter.post(
+  "/signin",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const user: IUserWithToken = await userWorker.signin(req.body);
+      res.json(user);
+      next();
+    } catch (err) {
+      next(new BaseError(500, "Failed to signin user.", (err as any).stack)); //tbd
     }
   }
 );

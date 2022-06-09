@@ -1,7 +1,11 @@
 import { agent as _request, SuperAgentTest } from "supertest";
 import { Server } from "http";
 import { quizServer } from "../../src/quiz_server";
-import { IUser, UserRole } from "../../src/interfaces/interfaces";
+import {
+  IUser,
+  IUserCredentials,
+  UserRole,
+} from "../../src/interfaces/interfaces";
 import { UserWorker } from "../../src/controllers/user_worker";
 
 let agent: SuperAgentTest;
@@ -117,6 +121,48 @@ describe("users routes", () => {
       const res = await agent.delete("/user/id=" + user2._id).expect(200);
       expect(res.body.message).toEqual("ok");
     }
+  });
+
+  it("POST /signin -  responds with token", async () => {
+    const newUser: IUserCredentials = {
+      username: "testuser3",
+      password: "testuser3pwd",
+    };
+
+    const res = await agent.post("/user/signin").send(newUser);
+
+    //correct response will have these properties
+    expect(res.body).toHaveProperty("username");
+    expect(res.body).toHaveProperty("token");
+    expect(res.body).toHaveProperty("role");
+    expect(res.body).toHaveProperty("_id");
+    expect(res.statusCode).toBe(200);
+  });
+
+  it("POST /signin with wrong password -  responds with error message", async () => {
+    const newUser: IUserCredentials = {
+      username: "testuser3",
+      password: "testuser3pwdwrong",
+    };
+
+    const res = await agent.post("/user/signin").send(newUser);
+
+    //correct response will have these properties
+    expect(res.body).toHaveProperty("message");
+    expect(res.statusCode).toBe(500);
+  });
+
+  it("POST /signin with wrong username -  responds with error message", async () => {
+    const newUser: IUserCredentials = {
+      username: "testuser3wrong",
+      password: "testuser3pwdwrong",
+    };
+
+    const res = await agent.post("/user/signin").send(newUser);
+
+    //correct response will have these properties
+    expect(res.body).toHaveProperty("message");
+    expect(res.statusCode).toBe(500);
   });
 
   afterEach((done) => {

@@ -1,5 +1,10 @@
-import { IUser, UserRole } from "../../src/interfaces/interfaces";
+import {
+  IUser,
+  IUserCredentials,
+  UserRole,
+} from "../../src/interfaces/interfaces";
 import { UserWorker } from "../../src/controllers/user_worker";
+import { compareSync } from "bcryptjs";
 
 const dbEmpty = async () => {
   const userWorker = new UserWorker();
@@ -58,7 +63,58 @@ describe("UserWorker", () => {
         let data = await worker.updateUser(user);
         expect(data._id).toEqual(user1_id);
         expect(data.username).toEqual(user.username);
-        expect(data.password).toEqual(user.password);
+        const equal = compareSync(user.password, data.password);
+        expect(equal).toEqual(true);
+      }
+    });
+
+    it("Should signin [updateUser]  user", async () => {
+      if (user1_id) {
+        let usersBefore = await new UserWorker().listUsers();
+        expect(usersBefore?.length).toEqual(1);
+
+        var userCred: IUserCredentials = {
+          username: usersBefore[0].username,
+          password: "updatedPassword",
+        };
+
+        let worker = new UserWorker();
+        let data = await worker.signin(userCred);
+        expect(data._id).toEqual(user1_id);
+        expect(data.username).toEqual(user.username);
+      }
+    });
+
+    it("Should NOT signin [updateUser]  user with wrong password", async () => {
+      if (user1_id) {
+        let usersBefore = await new UserWorker().listUsers();
+        expect(usersBefore?.length).toEqual(1);
+
+        var userCred: IUserCredentials = {
+          username: usersBefore[0].username,
+          password: "updatedPassword-wrong",
+        };
+
+        try {
+          let worker = new UserWorker();
+          let data = await worker.signin(userCred);
+        } catch (error) {
+          expect(error).toHaveProperty("message");
+        }
+      }
+    });
+
+    it("Should NOT signin [updateUser]  user with wrong username", async () => {
+      var userCred: IUserCredentials = {
+        username: "wrong",
+        password: "updatedPassword-wrong",
+      };
+
+      try {
+        let worker = new UserWorker();
+        let data = await worker.signin(userCred);
+      } catch (error) {
+        expect(error).toHaveProperty("message");
       }
     });
 
