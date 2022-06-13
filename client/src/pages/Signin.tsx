@@ -1,18 +1,12 @@
-import { AxiosError } from "axios";
 import { FC, ReactElement, useCallback, useEffect, useState } from "react";
 import { useMutation } from "react-query";
-import {
-  IQuizError,
-  IUserCredentials,
-  IUserWithToken,
-  UserRole,
-} from "../interfaces/EntityInterfaces";
+import { IUserWithToken } from "../interfaces/EntityInterfaces";
 import { UserWorker } from "../utils/UserWorker";
 import { ActionType } from "../store/action.types";
 
 import { useDispatch } from "react-redux";
-import { useTypedSelector } from "../store/hooks";
 import { useNavigate } from "react-router-dom";
+import { SIGNUP_PATH } from "../utils/config";
 
 const Signin = (): ReactElement => {
   const dispatch = useDispatch();
@@ -128,6 +122,15 @@ const Signin = (): ReactElement => {
           >
             Sign In
           </button>
+        </div>
+
+        <div className="flex items-center justify-between">
+          <p>
+            Don't have an account?{" "}
+            <a className="text-blue-700" href={SIGNUP_PATH}>
+              Register
+            </a>
+          </p>
         </div>
       </form>
     </div>

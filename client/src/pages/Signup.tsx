@@ -1,9 +1,13 @@
 import { FC, ReactElement, useEffect, useState } from "react";
 import { useMutation } from "react-query";
+import { useNavigate } from "react-router-dom";
 import { UserRole } from "../interfaces/EntityInterfaces";
+import { SIGNIN_PATH } from "../utils/config";
 import { UserWorker } from "../utils/UserWorker";
 
 const Signup = (): ReactElement => {
+  const navigate = useNavigate();
+
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
   const [username, setUsername] = useState<string>("");
@@ -50,6 +54,7 @@ const Signup = (): ReactElement => {
         {
           onSuccess: () => {
             setIsLoggedIn(true);
+            navigate(SIGNIN_PATH);
           },
           onError: (error: unknown) => {
             alert("error");
