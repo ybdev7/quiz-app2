@@ -1,11 +1,22 @@
 import { AxiosError } from "axios";
-import { FC, ReactElement, useEffect, useState } from "react";
+import { FC, ReactElement, useCallback, useEffect, useState } from "react";
 import { useMutation } from "react-query";
-import { IQuizError, UserRole } from "../interfaces/EntityInterfaces";
+import {
+  IQuizError,
+  IUserCredentials,
+  IUserWithToken,
+  UserRole,
+} from "../interfaces/EntityInterfaces";
 import { UserWorker } from "../utils/UserWorker";
+import { ActionType } from "../store/action.types";
+
+import { useDispatch } from "react-redux";
+import { useTypedSelector } from "../store/hooks";
+import { useNavigate } from "react-router-dom";
 
 const Signin = (): ReactElement => {
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [username, setUsername] = useState<string>("");
   const [usernameError, setUError] = useState<string>("Please enter username");
@@ -29,42 +40,41 @@ const Signin = (): ReactElement => {
     setPassword(event.target.value);
   };
 
-  const handleSubmit = () => {
+  async function handleSubmit() {
     if (allowSignIn) {
       console.log(`in Signup.handleSubmit()`);
+
+      dispatch({
+        type: ActionType.LOGGINGIN,
+        payload: {
+          username: username,
+          password: password,
+        },
+      });
+
       mutationCreate.mutate(
         {
           username: username,
           password: password,
         },
         {
-          onSuccess: () => {
-            setIsLoggedIn(true);
+          onSuccess: (userToken: IUserWithToken) => {
+            console.log("login success");
+            localStorage.setItem("userToken", JSON.stringify(userToken));
+
+            dispatch({ type: ActionType.LOGGEDIN, payload: userToken });
+            navigate("/");
           },
           onError: (error: unknown) => {
-            setError(
-              `${((error as AxiosError).response?.data as Error).message}`
-            );
-            console.log(
-              ((error as AxiosError).response?.data as Error).message,
-              ((error as AxiosError).response?.data as IQuizError).details
-            );
+            dispatch({ type: ActionType.LOGGEDOUT, payload: {} });
+            setError("Username and password do not match. Please try again.");
             console.log(error);
           },
         }
       );
     }
-  };
-
-  if (isLoggedIn) {
-    return (
-      <>
-        <div>
-          <p>You are now logged in!</p>
-        </div>
-      </>
-    );
   }
+
   return (
     <div className="flex justify-center items-center">
       <form className="w-full max-w-sm">

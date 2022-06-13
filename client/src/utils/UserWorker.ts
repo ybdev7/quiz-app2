@@ -9,6 +9,9 @@ import { config } from "./config";
 
 //The worker that will perform user operations
 export class UserWorker {
+  signout() {
+    console.log("logout - TBD!!!");
+  }
   /**
    * Adds a new user on server
    * @param user - new user to be added

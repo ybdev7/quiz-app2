@@ -15,21 +15,6 @@ const QuizList = ({ ...props }: QuizFilterableSearchableListProps) => {
        lg:ml-40 xl:ml-40
        lg:mr-40 xl:mr-40"
       >
-        <div
-          className=" h-24 sm:h-24 md:h-32 lg:32 flex
-          justify-center items-center
-          mb-2 text-violet-700 text-center bg-violet-200 rounded"
-        >
-          <div>
-            <span className=" text-[36px] font-['Papyrus']">
-              <span className="italic font-bold">EZ</span>ie
-              <span className="italic font-bold">Q</span>uizzies
-            </span>
-            <p className=" text-lg font-['Brush_Script_MT']">
-              Simply the best quizzes for every subject
-            </p>
-          </div>
-        </div>
         <FSGenericList {...props} />
       </div>
     </>
