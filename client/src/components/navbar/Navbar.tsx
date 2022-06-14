@@ -1,9 +1,29 @@
 import React, { useContext, useState } from "react";
-function Navbar() {
+import { IUserWithToken } from "../../interfaces/EntityInterfaces";
+import { useTypedSelector } from "../../store/hooks";
+import { useDispatch } from "react-redux";
+import { ActionType } from "../../store/action.types";
+import { LOCAL_STORAGE } from "../../utils/config";
+
+export interface INavbarProps {
+  isLoggedIn: boolean;
+}
+function Navbar({ isLoggedIn }: INavbarProps) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  //   const userState = useTypedSelector((state) => state.users);
+  const dispatch = useDispatch();
+
+  console.log("isloggedon=" + isLoggedIn);
 
   const handleClick = () => {
     setIsDrawerOpen(false);
+  };
+
+  const handleLogout = (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault();
+    dispatch({ type: ActionType.LOGGEDOUT });
+    // localStorage.removeItem("userToken");
+    localStorage.removeItem(LOCAL_STORAGE.USER_TOKEN);
   };
 
   return (
@@ -43,13 +63,24 @@ function Navbar() {
             </a>
           </div>
           <div>
-            <a
-              href="/login"
-              className="inline-block text-sm px-4 py-2 leading-none border rounded text-violet-700 border-violet-700 
+            {isLoggedIn ? (
+              <a
+                href="/"
+                className="inline-block text-sm px-4 py-2 leading-none border rounded text-violet-700 border-violet-700 
               hover:border-transparent hover:text-violet-900 hover:bg-violet-100 mt-4 lg:mt-0"
-            >
-              Sign In
-            </a>
+                onClick={handleLogout}
+              >
+                Sign Out
+              </a>
+            ) : (
+              <a
+                href="/login"
+                className="inline-block text-sm px-4 py-2 leading-none border rounded text-violet-700 border-violet-700 
+              hover:border-transparent hover:text-violet-900 hover:bg-violet-100 mt-4 lg:mt-0"
+              >
+                Sign In
+              </a>
+            )}
           </div>
         </div>
       </nav>

@@ -9,6 +9,7 @@ import About from "./pages/About";
 import Home from "./pages/Home";
 import Signin from "./pages/Signin";
 import Signup from "./pages/Signup";
+import { useTypedSelector } from "./store/hooks";
 import {
   ABOUT_PATH,
   HOME_PATH,
@@ -18,12 +19,12 @@ import {
 
 function App() {
   const queryClient = new QueryClient();
-
+  const userState = useTypedSelector((state) => state.users);
   return (
     <QueryClientProvider client={queryClient}>
       <>
         <BrowserRouter>
-          <Navbar />
+          <Navbar isLoggedIn={userState.isLoggedIn} />
           <Routes>
             <Route path={HOME_PATH} element={<Home />} />
             <Route path={ABOUT_PATH} element={<About />} />

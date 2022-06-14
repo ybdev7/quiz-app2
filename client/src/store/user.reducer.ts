@@ -2,11 +2,15 @@ import {
   IUserCredentials,
   IUserWithToken,
 } from "../interfaces/EntityInterfaces";
+import { LOCAL_STORAGE } from "../utils/config";
 import { Action, ActionType, State } from "./action.types";
+import { getUserToken, hasUserToken } from "./user.action";
 
 //initially user is not logged in
 const initialState: State = {
-  user: {},
+  //tbd - read from local storage
+  user: getUserToken(),
+  isLoggedIn: hasUserToken(),
 };
 
 const userReducer = (state: State = initialState, action: Action): State => {
@@ -16,6 +20,7 @@ const userReducer = (state: State = initialState, action: Action): State => {
       return {
         ...state,
         user: {},
+        isLoggedIn: false,
       };
 
     case ActionType.LOGGINGIN:
@@ -26,15 +31,18 @@ const userReducer = (state: State = initialState, action: Action): State => {
       return {
         ...state,
         user: loginCred,
+        isLoggedIn: false,
       };
 
     case ActionType.LOGGEDIN:
-      const u = localStorage.getItem("userToken");
-      const userToken = u ? (JSON.parse(u) as IUserWithToken) : {};
+      //   const u = localStorage.getItem(LOCAL_STORAGE.USER_TOKEN);
+      //   const userToken = u ? (JSON.parse(u) as IUserWithToken) : {};
+      const userToken = getUserToken();
       console.log("user.reducer " + userToken);
       return {
         ...state,
         user: userToken,
+        isLoggedIn: true,
       };
   }
   return state;

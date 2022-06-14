@@ -27,4 +27,5 @@ export type Action = actionLoggingIn | actionLoggedIn | actionLoggout;
 
 export type State = {
   user: {} | IUserCredentials | IUserWithToken;
+  isLoggedIn: boolean;
 };

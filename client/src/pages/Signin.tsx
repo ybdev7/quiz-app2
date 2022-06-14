@@ -6,7 +6,7 @@ import { ActionType } from "../store/action.types";
 
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { SIGNUP_PATH } from "../utils/config";
+import { LOCAL_STORAGE, SIGNUP_PATH } from "../utils/config";
 
 const Signin = (): ReactElement => {
   const dispatch = useDispatch();
@@ -54,7 +54,11 @@ const Signin = (): ReactElement => {
         {
           onSuccess: (userToken: IUserWithToken) => {
             console.log("login success");
-            localStorage.setItem("userToken", JSON.stringify(userToken));
+            // localStorage.setItem("userToken", JSON.stringify(userToken));
+            localStorage.setItem(
+              LOCAL_STORAGE.USER_TOKEN,
+              JSON.stringify(userToken)
+            );
 
             dispatch({ type: ActionType.LOGGEDIN, payload: userToken });
             navigate("/");
@@ -72,7 +76,7 @@ const Signin = (): ReactElement => {
   return (
     <div className="flex justify-center items-center">
       <form className="w-full max-w-sm">
-        <h3>Sign Up</h3>
+        <h3>Sign In</h3>
         <div className="mb-4">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
