@@ -1,20 +1,5 @@
-import { useMutation } from "react-query";
-import {
-  IUserCredentials,
-  IUserWithToken,
-} from "../interfaces/EntityInterfaces";
+import { IUserWithToken } from "../interfaces/EntityInterfaces";
 import { LOCAL_STORAGE } from "../utils/config";
-import { UserWorker } from "../utils/UserWorker";
-import { Action, ActionType } from "./action.types";
-
-function loggedin() {
-  return { type: ActionType.LOGGINGIN };
-}
-
-function logout() {
-  new UserWorker().signout();
-  return { type: ActionType.LOGGEDOUT };
-}
 
 export function getUserToken() {
   let userToken = {};
@@ -39,4 +24,20 @@ export function hasUserToken() {
     console.log(error);
   }
   return false;
+}
+
+export function login(userToken: IUserWithToken) {
+  try {
+    localStorage.setItem(LOCAL_STORAGE.USER_TOKEN, JSON.stringify(userToken));
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export function logout() {
+  try {
+    localStorage.removeItem(LOCAL_STORAGE.USER_TOKEN);
+  } catch (error) {
+    console.log(error);
+  }
 }

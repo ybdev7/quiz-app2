@@ -1,19 +1,15 @@
-import React, { useContext, useState } from "react";
-import { IUserWithToken } from "../../interfaces/EntityInterfaces";
-import { useTypedSelector } from "../../store/hooks";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { ActionType } from "../../store/action.types";
-import { LOCAL_STORAGE } from "../../utils/config";
 
 export interface INavbarProps {
   isLoggedIn: boolean;
+  logout: () => void;
 }
-function Navbar({ isLoggedIn }: INavbarProps) {
+function Navbar({ isLoggedIn, logout }: INavbarProps) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  //   const userState = useTypedSelector((state) => state.users);
-  const dispatch = useDispatch();
 
-  console.log("isloggedon=" + isLoggedIn);
+  const dispatch = useDispatch();
 
   const handleClick = () => {
     setIsDrawerOpen(false);
@@ -21,9 +17,8 @@ function Navbar({ isLoggedIn }: INavbarProps) {
 
   const handleLogout = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
+    logout();
     dispatch({ type: ActionType.LOGGEDOUT });
-    // localStorage.removeItem("userToken");
-    localStorage.removeItem(LOCAL_STORAGE.USER_TOKEN);
   };
 
   return (

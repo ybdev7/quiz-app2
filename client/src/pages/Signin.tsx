@@ -7,6 +7,7 @@ import { ActionType } from "../store/action.types";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { LOCAL_STORAGE, SIGNUP_PATH } from "../utils/config";
+import { login } from "../store/user.action";
 
 const Signin = (): ReactElement => {
   const dispatch = useDispatch();
@@ -53,13 +54,7 @@ const Signin = (): ReactElement => {
         },
         {
           onSuccess: (userToken: IUserWithToken) => {
-            console.log("login success");
-            // localStorage.setItem("userToken", JSON.stringify(userToken));
-            localStorage.setItem(
-              LOCAL_STORAGE.USER_TOKEN,
-              JSON.stringify(userToken)
-            );
-
+            login(userToken);
             dispatch({ type: ActionType.LOGGEDIN, payload: userToken });
             navigate("/");
           },

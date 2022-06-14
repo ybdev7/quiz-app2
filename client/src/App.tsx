@@ -16,6 +16,7 @@ import {
   SIGNIN_PATH,
   SIGNUP_PATH,
 } from "./utils/config";
+import { logout } from "./store/user.action";
 
 function App() {
   const queryClient = new QueryClient();
@@ -24,7 +25,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <>
         <BrowserRouter>
-          <Navbar isLoggedIn={userState.isLoggedIn} />
+          <Navbar isLoggedIn={userState.isLoggedIn} logout={logout} />
           <Routes>
             <Route path={HOME_PATH} element={<Home />} />
             <Route path={ABOUT_PATH} element={<About />} />
