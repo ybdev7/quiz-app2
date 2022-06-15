@@ -27,7 +27,7 @@ const Home: FC<{}> = (): ReactElement => {
   } else if (status === "error") {
     return (
       <>
-        <p>Error</p>
+        <p>{"Error: " + error}</p>
       </>
     );
   }

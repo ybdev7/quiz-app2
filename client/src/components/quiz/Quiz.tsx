@@ -1,12 +1,15 @@
 import React from "react";
 import {
   IQuiz,
+  IUserWithToken,
   QuizCategory,
   QuizLevel,
+  UserRole,
 } from "../../interfaces/EntityInterfaces";
 import IconButton, { IconPosition, IconsList } from "../buttons/IconButton";
 import { AiOutlineCalculator } from "react-icons/ai";
 import * as AI from "react-icons/ai";
+import { useTypedSelector } from "../../store/hooks";
 
 interface IQuizProps {
   quiz: IQuiz;
@@ -24,6 +27,7 @@ enum CategoryIcons {
 const Quiz = React.memo(({ quiz }: IQuizProps) => {
   console.log(`Actually rendering quiz id=${quiz._id}`);
 
+  const userState = useTypedSelector((state) => state.users);
   const divLevelClassNames = [
     "bg-indigo-100 h-auto w-6 md:w-6 lg:w-8 flex items-start justify-center m-0 p-0 bg-cover p-0 m-0 rounded-tl-lg rounded-bl-lg overflow-hidden",
     "bg-indigo-300 h-auto w-6 md:w-6 lg:w-8 flex items-start justify-center m-0 p-0 bg-cover p-0 m-0 rounded-tl-lg rounded-bl-lg overflow-hidden",
@@ -60,6 +64,14 @@ const Quiz = React.memo(({ quiz }: IQuizProps) => {
         return null;
     }
   };
+
+  const handleDelete = () => {};
+
+  const handleEdit = () => {};
+  const handlePrint = () => {};
+  const handlePreview = () => {};
+  const handleTakeQuiz = () => {};
+
   return (
     <>
       <div
@@ -86,13 +98,42 @@ const Quiz = React.memo(({ quiz }: IQuizProps) => {
               </span>
             </div>
             <div className="mt-3 mb-2 flex justify-end">
-              <IconButton icon={IconsList.Delete} />
-              <IconButton icon={IconsList.Edit} />
-              <IconButton text="Preview" />
+              {userState.isLoggedIn &&
+                (userState.user as IUserWithToken).role === UserRole.Admin && (
+                  <IconButton
+                    disabled={
+                      !(
+                        userState.isLoggedIn &&
+                        (userState.user as IUserWithToken).role ===
+                          UserRole.Admin
+                      )
+                    }
+                    icon={IconsList.Delete}
+                    handleClick={handleDelete}
+                  />
+                )}
+              {userState.isLoggedIn &&
+                (userState.user as IUserWithToken).role === UserRole.Admin && (
+                  <IconButton
+                    disabled={
+                      !(
+                        userState.isLoggedIn &&
+                        (userState.user as IUserWithToken).role ===
+                          UserRole.Admin
+                      )
+                    }
+                    icon={IconsList.Edit}
+                    handleClick={handleEdit}
+                  />
+                )}
+              <IconButton icon={IconsList.Print} handleClick={handlePrint} />
+              <IconButton text="Preview" handleClick={handlePreview} />
               <IconButton
                 icon={IconsList.ArrowRight}
                 iconPos={IconPosition.Right}
                 text="Take Quiz"
+                disabled={!userState.isLoggedIn}
+                handleClick={handleTakeQuiz}
               />
             </div>
           </div>

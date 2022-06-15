@@ -7,6 +7,8 @@ interface IIconButtonProps {
   icon?: IconsList;
   iconPos?: IconPosition;
   className?: string;
+  disabled?: boolean;
+  handleClick: () => void;
 }
 
 export enum IconsList {
@@ -15,6 +17,7 @@ export enum IconsList {
   Delete = "AiOutlineDelete",
   Edit = "AiOutlineEdit",
   Preview = "AiOutlineFileSearch",
+  Print = "AiOutlinePrinter",
 }
 
 export enum IconPosition {
@@ -22,7 +25,7 @@ export enum IconPosition {
   Right,
 }
 /**
- * React.memo used here to guarantee that the Book ui does not need to be re-rendered if the button is already part of the list
+ * React.memo used here to guarantee that the quiz ui does not need to be re-rendered if the button is already part of the list
  */
 const IconButton = React.memo(
   ({
@@ -30,6 +33,8 @@ const IconButton = React.memo(
     text,
     iconPos = IconPosition.Left,
     className = "m-1",
+    disabled = false,
+    handleClick,
   }: IIconButtonProps) => {
     const iconElLeft = icon
       ? React.createElement(AI[icon], {
@@ -48,12 +53,22 @@ const IconButton = React.memo(
         })
       : null;
 
+    const disabledClassNameButtonWithText =
+      "bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium shadow hover:shadow-lg font-bold py-1 px-4 rounded-full inline-flex items-center disabled: opacity-50 cursor-not-allowed";
+    const enabledClassNameButtonWithText =
+      "bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium shadow hover:shadow-lg font-bold py-1 px-4 rounded-full inline-flex items-center";
+
+    const classnameButtonWithText = disabled
+      ? disabledClassNameButtonWithText
+      : enabledClassNameButtonWithText;
+
     const buttonWithText =
       iconPos === IconPosition.Left ? (
         <button
           key={uuidv4()}
-          className="bg-slate-100 hover:bg-slate-200 
-          text-slate-700 font-medium shadow hover:shadow-lg font-bold py-1 px-4 rounded-full inline-flex items-center"
+          className={classnameButtonWithText}
+          disabled={disabled}
+          onClick={handleClick}
         >
           {iconElLeft}
           {/* <AiOutlineQuestion className="text-slate-700 fill-current w-4 h-4 mr-2" /> */}
@@ -62,18 +77,29 @@ const IconButton = React.memo(
       ) : (
         <button
           key={uuidv4()}
-          className="bg-slate-100 hover:bg-slate-200 
-          text-slate-700 font-medium shadow hover:shadow-lg font-bold py-1 px-2 rounded-full inline-flex items-center"
+          className={classnameButtonWithText}
+          disabled={disabled}
+          onClick={handleClick}
         >
           {text}
           {iconElRight}
         </button>
       );
 
+    const enabledClassName =
+      "bg-slate-100 hover:bg-slate-200 text-slate-700 shadow hover:shadow-lg font-bold py-1 px-2 rounded-full inline-flex items-center ";
+    const disabledClassName =
+      "bg-slate-100 hover:bg-slate-200 text-slate-700 shadow hover:shadow-lg font-bold py-1 px-2 rounded-full inline-flex items-center disabled:opacity-25 cursor-not-allowed";
+
+    const classNameButtonWOText = disabled
+      ? disabledClassName
+      : enabledClassName;
     const buttonWithoutText = (
       <button
         key={uuidv4()}
-        className="bg-slate-100 hover:bg-slate-200 text-slate-700 shadow hover:shadow-lg font-bold py-1 px-2 rounded-full inline-flex items-center"
+        disabled={disabled}
+        className={classNameButtonWOText}
+        onClick={handleClick}
       >
         {iconWithoutText}
       </button>
@@ -84,25 +110,6 @@ const IconButton = React.memo(
         {text ? buttonWithText : buttonWithoutText}
       </span>
     );
-
-    // return iconPos === IconPosition.Left ? (
-    //   <button
-    //     key={uuidv4()}
-    //     className="bg-slate-100 hover:bg-slate-200 text-slate-700 shadow hover:shadow-lg font-bold py-1 px-4 rounded-full inline-flex items-center"
-    //   >
-    //     {iconElLeft}
-    //     {/* <AiOutlineQuestion className="text-slate-700 fill-current w-4 h-4 mr-2" /> */}
-    //     {text}
-    //   </button>
-    // ) : (
-    //   <button
-    //     key={uuidv4()}
-    //     className="bg-slate-100 hover:bg-slate-200 text-slate-700 shadow hover:shadow-lg font-bold py-1 px-2 rounded-full inline-flex items-center"
-    //   >
-    //     {text}
-    //     {iconElRight}
-    //   </button>
-    // );
   }
 );
 
