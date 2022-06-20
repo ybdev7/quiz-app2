@@ -18,6 +18,8 @@ export enum IconsList {
   Edit = "AiOutlineEdit",
   Preview = "AiOutlineFileSearch",
   Print = "AiOutlinePrinter",
+  Check = "AiOutlineCheck",
+  Back = "AiOutlineArrowLeft",
 }
 
 export enum IconPosition {
@@ -25,7 +27,7 @@ export enum IconPosition {
   Right,
 }
 /**
- * React.memo used here to guarantee that the quiz ui does not need to be re-rendered if the button is already part of the list
+ * React.memo used here to guarantee that the button ui does not need to be re-rendered if the button is already part of the list
  */
 const IconButton = React.memo(
   ({

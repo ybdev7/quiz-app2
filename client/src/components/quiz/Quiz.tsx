@@ -10,6 +10,7 @@ import IconButton, { IconPosition, IconsList } from "../buttons/IconButton";
 import { AiOutlineCalculator } from "react-icons/ai";
 import * as AI from "react-icons/ai";
 import { useTypedSelector } from "../../store/hooks";
+import { useNavigate } from "react-router-dom";
 
 interface IQuizProps {
   quiz: IQuiz;
@@ -28,6 +29,8 @@ const Quiz = React.memo(({ quiz }: IQuizProps) => {
   console.log(`Actually rendering quiz id=${quiz._id}`);
 
   const userState = useTypedSelector((state) => state.users);
+  const navigate = useNavigate();
+
   const divLevelClassNames = [
     "bg-indigo-100 h-auto w-6 md:w-6 lg:w-8 flex items-start justify-center m-0 p-0 bg-cover p-0 m-0 rounded-tl-lg rounded-bl-lg overflow-hidden",
     "bg-indigo-300 h-auto w-6 md:w-6 lg:w-8 flex items-start justify-center m-0 p-0 bg-cover p-0 m-0 rounded-tl-lg rounded-bl-lg overflow-hidden",
@@ -70,7 +73,9 @@ const Quiz = React.memo(({ quiz }: IQuizProps) => {
   const handleEdit = () => {};
   const handlePrint = () => {};
   const handlePreview = () => {};
-  const handleTakeQuiz = () => {};
+  const handleTakeQuiz = () => {
+    navigate("/runquiz", { state: { quiz: quiz } });
+  };
 
   return (
     <>

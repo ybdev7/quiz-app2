@@ -13,10 +13,12 @@ import { useTypedSelector } from "./store/hooks";
 import {
   ABOUT_PATH,
   HOME_PATH,
+  RUN_QUIZ,
   SIGNIN_PATH,
   SIGNUP_PATH,
 } from "./utils/config";
 import { logout } from "./store/user.action";
+import QuizForm from "./components/quiz/QuizForm";
 
 function App() {
   const queryClient = new QueryClient();
@@ -31,6 +33,7 @@ function App() {
             <Route path={ABOUT_PATH} element={<About />} />
             <Route path={SIGNIN_PATH} element={<Signin />} />
             <Route path={SIGNUP_PATH} element={<Signup />} />
+            <Route path={RUN_QUIZ} element={<QuizForm />} />
           </Routes>
         </BrowserRouter>
       </>

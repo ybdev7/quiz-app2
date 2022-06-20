@@ -7,7 +7,7 @@ export const ABOUT_PATH = "/about";
 export const SIGNIN_PATH = "/login";
 
 export const SIGNUP_PATH = "/register";
-
+export const RUN_QUIZ = "/runquiz";
 export const ERROR_PATH = "/error";
 
 export const enum LOCAL_STORAGE {
